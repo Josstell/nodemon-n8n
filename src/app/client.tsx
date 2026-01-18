@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Client = (props: Props) => {
-  return (
-    <div>Client</div>
-  )
-}
+  return <div>Cliente</div>;
+};
 
-export default Client
+export default Client;
