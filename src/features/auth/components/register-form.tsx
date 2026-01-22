@@ -28,21 +28,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import {authClient} from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
-const registerSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters"),
-  confirmPassword: z
-    .string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match", path: ["confirmPassword"],
-},
-
-);
+const registerSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Invalid email address"),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 type registerFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
@@ -63,7 +67,7 @@ export function RegisterForm() {
         name: data.email,
         email: data.email,
         password: data.password,
-        callbackURL:"/"
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -72,9 +76,9 @@ export function RegisterForm() {
         },
         onError: (ctx) => {
           toast.error(`Registration failed: ${ctx.error.message}`);
-        }
-      }
-    )
+        },
+      },
+    );
   };
   const isPending = form.formState.isSubmitting;
   return (
@@ -95,6 +99,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Github"
+                      src="/logos/GitHub.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
                   <Button
@@ -103,6 +113,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Google"
+                      src="/logos/google.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -141,7 +157,7 @@ export function RegisterForm() {
                       </FormItem>
                     )}
                   />
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="confirmPassword"
                     render={({ field }) => (

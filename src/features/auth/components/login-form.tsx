@@ -52,19 +52,22 @@ export function LoginForm() {
     },
   });
   const onSubmit = async (data: loginFormValues) => {
-    await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
-      callbackURL: "/",
-    },{
-      onSuccess: () => {
-        toast.success("Logged in successfully");
-        router.push("/");
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+        callbackURL: "/",
       },
-      onError: (ctx) => {
-        toast.error(`Login failed: ${ctx.error.message}`);
+      {
+        onSuccess: () => {
+          toast.success("Logged in successfully");
+          router.push("/");
+        },
+        onError: (ctx) => {
+          toast.error(`Login failed: ${ctx.error.message}`);
+        },
       },
-    })
+    );
   };
   const isPending = form.formState.isSubmitting;
   return (
@@ -85,6 +88,12 @@ export function LoginForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Github"
+                      src="/logos/GitHub.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
                   <Button
@@ -93,6 +102,12 @@ export function LoginForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Google"
+                      src="/logos/google.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>

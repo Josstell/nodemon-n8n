@@ -5,13 +5,9 @@ import React from "react";
 type Props = {};
 
 const registerPage = async (props: Props) => {
-    await requireUnauth();
-  
-  return (
-    <div>
-      <RegisterForm/>
-    </div>
-  );
+  await requireUnauth();
+
+  return <RegisterForm />;
 };
 
 export default registerPage;
