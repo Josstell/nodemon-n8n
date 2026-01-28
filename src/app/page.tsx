@@ -5,6 +5,13 @@ import { useTRPC } from "@/trpc/client";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+/**
+ * Client-side React component that fetches workflows and exposes a "Test AI" button to enqueue an AI job.
+ *
+ * The button triggers a TRPC mutation to queue the AI job, is disabled while the mutation is pending, and the mutation response is rendered as JSON. A success toast is shown when the job is queued.
+ *
+ * @returns The component's React element
+ */
 export default function Home() {
   const queryClient = new QueryClient();
   const trpc = useTRPC();
