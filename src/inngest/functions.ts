@@ -1,8 +1,8 @@
 import prisma from "@/lib/db";
 import { inngest } from "./client";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import {createOpenAI} from "@ai-sdk/openai";
-import {createAnthropic} from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 
 import { generateText } from "ai";
 
@@ -15,27 +15,53 @@ export const execute = inngest.createFunction(
   { event: "execute/ai" },
   async ({ event, step }) => {
     await step.sleep("Pretend to do something", "5s");
-    const {steps:geminiSteps} = await step.ai.wrap("gemini-generate-text", generateText,{
-      model: google("gemini-2.5-flash"),
-      system: "You are a helpful assistant.",
-      prompt: "Waht is 2+2?",
-      });
+    const { steps: geminiSteps } = await step.ai.wrap(
+      "gemini-generate-text",
+      generateText,
+      {
+        model: google("gemini-2.5-flash"),
+        system: "You are a helpful assistant.",
+        prompt: "Waht is 2+2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
+      },
+    );
 
-       const {steps:openaiSteps} = await step.ai.wrap("openai-generate-text", generateText,{
-      model: openai("gpt-4"),
-      system: "You are a helpful assistant.",
-      prompt: "Waht is 2+2?",
-      });
-       const {steps:anthropicSteps} = await step.ai.wrap("anthropic-generate-text", generateText,{
-      model: anthropic("claude-3-5-sonnet"),
-      system: "You are a helpful assistant.",
-      prompt: "Waht is 2+2?",
-      });
-   return {
-    geminiSteps,
-    openaiSteps,
-    anthropicSteps,
-    }
-    
+    const { steps: openaiSteps } = await step.ai.wrap(
+      "openai-generate-text",
+      generateText,
+      {
+        model: openai("gpt-4"),
+        system: "You are a helpful assistant.",
+        prompt: "Waht is 2+2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
+      },
+    );
+    const { steps: anthropicSteps } = await step.ai.wrap(
+      "anthropic-generate-text",
+      generateText,
+      {
+        model: anthropic("claude-3-5-sonnet"),
+        system: "You are a helpful assistant.",
+        prompt: "Waht is 2+2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
+      },
+    );
+    return {
+      geminiSteps,
+      openaiSteps,
+      anthropicSteps,
+    };
   },
 );
