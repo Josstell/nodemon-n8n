@@ -1,9 +1,6 @@
 procs:
  inngest:
-    cmd: ["npm", "run", "inngest:dev"]
+    shell: "npm run inngest:dev"
     
  next:
-    cmd: ["npm", "run", "dev"]
-  
-    
-    
+    shell: "npm run dev"
