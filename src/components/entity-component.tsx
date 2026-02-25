@@ -2,9 +2,19 @@
 
 import React from 'react'
 import { Button } from './ui/button'
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, SearchIcon } from 'lucide-react'
+import { AlertTriangleIcon, ChevronLeftIcon, ChevronRightIcon, Loader2Icon, PackageOpenIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Input } from './ui/input'
+
+import {
+    Empty,
+    EmptyContent,
+    EmptyTitle,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia
+} from './ui/empty'
+import { cn } from '@/lib/utils'
 
 type Props = {
     title: string
@@ -156,5 +166,94 @@ export const EntityPagination = ({
             </div>
         </div>
 
+    )
+}
+
+
+
+interface StateViewProps {
+    message?: string
+}
+
+
+
+export const LoadingView = ({ message }: StateViewProps) => {
+    return (
+        <div className='flex items-center justify-center h-full flex-1 flex-col gap-y-4'>
+            <div className='flex flex-col items-center gap-y-2'>
+                <Loader2Icon className='size-6 animate-spin' />
+                {!!message && <p className='text-sm md:text-base text-primary'>{message}</p>}
+            </div>
+        </div>
+    )
+}
+
+export const ErrorView = ({ message }: StateViewProps) => {
+    return (
+        <div className='flex items-center justify-center h-full flex-1 flex-col gap-y-4'>
+            <div className='flex flex-col items-center gap-y-2'>
+                <AlertTriangleIcon className='size-6 text-destructive' />
+                {!!message && <p className='text-sm md:text-base text-destructive'>{message}</p>}
+            </div>
+        </div>
+    )
+}
+
+
+interface EntityEmptyProps extends StateViewProps {
+    onNew?: () => void
+}
+
+export const EntityEmpty = ({
+    message,
+    onNew
+}: EntityEmptyProps) => {
+    return (
+        <Empty className='border border-dashed bg-white'>
+            <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <PackageOpenIcon />
+                </EmptyMedia>
+            </EmptyHeader>
+            <EmptyTitle>No items</EmptyTitle>
+            <EmptyDescription>
+                {message}
+            </EmptyDescription>
+            {
+                !!onNew && (
+                    <EmptyContent>
+                        <Button onClick={onNew}>Add new</Button>
+                    </EmptyContent>
+                )
+            }
+        </Empty>
+    )
+}
+
+
+interface EntityListProps<T> {
+    items: T[]
+    renderItem: (item: T) => React.ReactNode
+    getKey: (item: T, index: number) => string | number
+    emptyView?: React.ReactNode
+    className?: string
+}
+
+export const EntityList = <T,>({ items, renderItem, getKey, emptyView, className }: EntityListProps<T>) => {
+    if (items.length === 0 && emptyView) {
+        return <div className="flex-1 flex items-center justify-center">
+            <div className="mx-w-sm mx-auto">
+                {emptyView}
+            </div>
+        </div>
+    }
+    return (
+        <div className={cn("flex flex-col gap-y-4", className)}>
+            {items.map((item, index) => (
+                <div key={getKey(item, index)}>
+                    {renderItem(item)}
+                </div>
+            ))}
+        </div>
     )
 }
